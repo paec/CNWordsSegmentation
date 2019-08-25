@@ -41,8 +41,8 @@ while True:
 
     try:
        
-        sentence = re.sub(r"["+zhon.hanzi.punctuation+string.punctuation+"]","",input("please input something: "))      
-        # sentence = "我等一下想去成功大學的google大操場上盡情的奔跑玩耍然後去買冰來吃，應該會很好玩才對，因為外面天氣很涼快而safari ins且g空氣很新鮮，孔子說身為女朋友要學習包容，招數不要用太多老想著把我擊倒chorme"
+        # sentence = re.sub(r"["+zhon.hanzi.punctuation+string.punctuation+"]","",input("please input something: "))      
+        sentence = "假如我們有抽取出這樣的entity，我們突然想要做判斷一篇新聞是不是負面新聞，是不是可以有很好的特徵去做分類訓練呢。"
         
         resultlist = list()
         length = len(sentence)
@@ -87,16 +87,15 @@ while True:
                 last = last -1
                 # print(3)
 
-        print("\n")
+        # print("\n")
         print(resultlist)
-        print("\n")
+        # print("\n")
         print(count)
 
-        # break
+        break
 
     except EOFError:
         break
-
 
 
 
