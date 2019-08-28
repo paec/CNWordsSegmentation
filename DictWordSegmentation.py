@@ -15,84 +15,74 @@ import string
 #     pickle.dump(worddict, handle, protocol=pickle.HIGHEST_PROTOCOL)
 # ------------------------------------------------------------------------------------------------
 
-with open('worddict.pickle', 'rb') as handle: #將pickle檔裡的set讀出
-    worddict = pickle.load(handle)
+# with open('worddict.pickle', 'rb') as handle: #將pickle檔裡的set讀出
+#     worddict = pickle.load(handle)
 
+with open("welldict.txt","r" , encoding = "utf8") as f:
+  worddict = set(f.read().splitlines())
 
-def isEnglish(s):
-    if s.islower() | s.isupper():
+maxlen = len(max(worddict,key=len))
+start = int()
+last = int()
+
+def isnumoreng(s):
+    if s.islower() or s.isupper() or s.isdigit():
         return True
-    
     return False
 
-class StringBuilder:
-     _file_str = None
+def addtolist(num,word):
+    global start
+    global last
+    resultlist.append(word)
+    start = num
+    last = start+maxlen if start+maxlen < length else length #字典裡最長詞長度約17
 
-     def __init__(self):
-         self._file_str = StringIO()
-
-     def Append(self, str):
-         self._file_str.write(str)
-
-     def __str__(self):
-         return self._file_str.getvalue()
 
 while True:
 
     try:
-       
-        # sentence = re.sub(r"["+zhon.hanzi.punctuation+string.punctuation+"]","",input("please input something: "))      
-        sentence = "假如我們有抽取出這樣的entity，我們突然想要做判斷一篇新聞是不是負面新聞，是不是可以有很好的特徵去做分類訓練呢。"
-        
+
+        # sentence = ""
+        sentence = input()
         resultlist = list()
         length = len(sentence)
-
         start = 0 
-        last = start+17 # dict裡最長的字串約為17
-        count = 0
+        last = start+maxlen if start+maxlen < length else length
 
         while start!=length:
-
-            count = count+1
             
-            longword = sentence[start:last] 
+            if sentence[start]==" ": #略過空白
+                start += 1
+                continue
+    
+            if isnumoreng(sentence[start]): #如果是數字或英文開頭，直接掃到不是數字或英文為止，然後加入resultlist
 
-                    
-            if(isEnglish(longword[0])):
-
-                sb = StringBuilder()
-
+                sb = str()
                 tmpstart = start
-                while tmpstart<len(sentence) and isEnglish(sentence[tmpstart]) :
-                    sb.Append(sentence[tmpstart])
+
+                while tmpstart<length and isnumoreng(sentence[tmpstart]) :
+                    sb += sentence[tmpstart]
                     tmpstart = tmpstart+1
 
-                resultlist.append(sb.__str__())
-                start = tmpstart
-                last = start+17 if start+17 < length else length
+                addtolist(tmpstart,sb)
 
-            elif start+1 == last :
+                continue
 
-                resultlist.append(longword)
-                start = start + 1
-                last = start+17 if start+17 < length else length
-                # print(1)
-            elif longword in worddict:
 
-                resultlist.append(longword)
-                start = last
-                last = start+17 if start+17 < length else length
-                # print(2)
-            else:
-                last = last -1
-                # print(3)
+            while True: #如果是中文字開頭，開始尋找匹配的詞
 
-        # print("\n")
+                longword = sentence[start:last] 
+            
+                if start+1 == last or longword in worddict:
+                    addtolist(last,longword)
+                    break
+                else:
+                    last = last -1
+
+
         print(resultlist)
-        # print("\n")
-        print(count)
 
-        break
+        # break
 
     except EOFError:
         break
